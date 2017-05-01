@@ -3,6 +3,8 @@ package com.rest.users.controllers;
 import java.util.Arrays;
 import java.util.List;
 
+import com.rest.users.services.impl.UserServiceCheck;
+import com.rest.users.services.impl.UserServiceVerify;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +25,10 @@ public class UserController {
 	final static Logger logger = Logger.getLogger(UserController.class);
 
 	@Autowired
-	private UserService userService;
-	
+	private UserServiceCheck userService;
+
+	@Autowired
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<User>> getAllUsers() {
 		List<User> usersList = userService.getAll();

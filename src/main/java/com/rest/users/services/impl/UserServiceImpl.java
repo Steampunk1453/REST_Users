@@ -1,25 +1,30 @@
 package com.rest.users.services.impl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
+import com.rest.users.controllers.UserController;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.rest.users.models.User;
 import com.rest.users.repositories.UserRepository;
 import com.rest.users.services.UserService;
 
-@Service
-public class UserServiceImpl implements UserService {
+public abstract class UserServiceImpl implements UserService {
+
+    final static Logger logger = Logger.getLogger(UserController.class);
 	
 	@Autowired
 	private UserRepository userRepository;
 
 	@Override
 	public User save(User entity) {
-		return userRepository.save(entity);
-	}
+        User user = userRepository.save(entity);
+        checkSave(user);
+        return user;
+    }
 
 	@Override
 	public User getById(Serializable id) {
@@ -34,9 +39,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void delete(Serializable id) {
 		userRepository.delete((Long) id);
-		
+
 	}
 
-	
+    public void checkSave(User user) {
+	    if(user != null) {
+	        User checkUser = new User();
+            checkUser.setName(user.getName());
+            checkUser.setBirthday(new Date());
+            userRepository.save(checkUser);
+        }
+	    else {
+            logger.error("Error save User");
+        }
+    }
 
 }
